@@ -187,6 +187,12 @@ variable "chef_server_url" {
   default     = ""
 }
 
+variable "chef_node_name" {
+  type        = "string"
+  description = "the name to assign to your node"
+  default     = ""
+}
+
 variable "default_system_user" {
   type        = "string"
   description = "The system user to use when connecting to the instance"
