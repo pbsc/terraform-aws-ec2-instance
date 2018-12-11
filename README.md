@@ -4,17 +4,18 @@ Terraform module which creates EC2 instance(s) on AWS.
 
 These types of resources are supported:
 
-* [EC2 instance](https://www.terraform.io/docs/providers/aws/r/instance.html) 
+* [EC2 instance](https://www.terraform.io/docs/providers/aws/r/instance.html)
 
 ## Usage
 
 ```hcl
 module "ec2_cluster" {
-  source = "terraform-aws-modules/ec2-instance/aws"
+  source                 = "terraform-aws-modules/ec2-instance/aws"
+  version                = "1.12.0"
 
-  name           = "my-cluster"
-  instance_count = 5
-  
+  name                   = "my-cluster"
+  instance_count         = 5
+
   ami                    = "ami-ebd02392"
   instance_type          = "t2.micro"
   key_name               = "user1"
@@ -40,6 +41,7 @@ module "ec2_cluster" {
   bastion_host           = "${element(module.bastion.public_ip, 0)}"
   bastion_user           = "centos"
   bastion_private_key    = "${tls_private_key.default.private_key_pem}"
+  allocate_eip           = true # use an elastic IP?
 }
 ```
 
@@ -50,7 +52,7 @@ module "ec2_cluster" {
 
 ## Make an encrypted AMI for use
 
-This module does not sopport encrypted AMI's out of the box however it is easy enough for you to generate one for use
+This module does not support encrypted AMI's out of the box however it is easy enough for you to generate one for use
 
 This example creates an encrypted image from the latest ubuntu 16.04 base image.
 
@@ -81,12 +83,13 @@ data "aws_ami" "encrypted-ami" {
 
 data "aws_ami" "ubuntu-xenial" {
   most_recent = true
-  owners      = ["099720109477"]
 
   filter {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
   }
+
+  owners      = ["099720109477"]
 }
 ```
 
@@ -103,6 +106,7 @@ data "aws_ami" "ubuntu-xenial" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| allocate_eip | If true, the instances will each have an EIP allocated and associated and the EIP's value will be outputed by the module instead of a normal public IP | boolean | false | yes |
 | ami | ID of AMI to use for the instance | string | - | yes |
 | associate_public_ip_address | If true, the EC2 instance will have associated public IP address | string | `false` | no |
 | cpu_credits | The credit option for CPU usage (unlimited or standard) | string | `standard` | no |

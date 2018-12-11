@@ -210,3 +210,9 @@ variable "bastion_private_key" {
   description = "The private key associated to the bastion user"
   default     = ""
 }
+
+variable "allocate_eip" {
+  type        = "string"
+  description = "Do you want an EIP provisioned and allocated?"
+  default     = "false"
+}
