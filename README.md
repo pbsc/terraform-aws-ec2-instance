@@ -41,6 +41,7 @@ module "ec2_cluster" {
   bastion_host           = "${element(module.bastion.public_ip, 0)}"
   bastion_user           = "centos"
   bastion_private_key    = "${tls_private_key.default.private_key_pem}"
+  allocate_eip           = true # use an elastic IP?
 }
 ```
 
@@ -105,6 +106,7 @@ data "aws_ami" "ubuntu-xenial" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| allocate_eip | If true, the instances will each have an EIP allocated and associated and the EIP's value will be outputed by the module instead of a normal public IP | boolean | false | yes |
 | ami | ID of AMI to use for the instance | string | - | yes |
 | associate_public_ip_address | If true, the EC2 instance will have associated public IP address | string | `false` | no |
 | cpu_credits | The credit option for CPU usage (unlimited or standard) | string | `standard` | no |
