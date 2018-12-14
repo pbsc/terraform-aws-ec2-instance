@@ -150,7 +150,7 @@ resource "null_resource" "provision_instances" {
 
     connection {
       type                   = "ssh"
-      host                   = "${element(aws_eip.this.*.public_ip, count.index)}"
+      host                   = "${element(local.public_ip_for_conn, count.index)}"
       user                   = "${var.default_system_user}"
       private_key            = "${var.ssh_private_key}"
 
