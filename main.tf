@@ -102,6 +102,7 @@ resource "aws_eip_association" "eip_assoc" {
 
 
 resource "null_resource" "provision_instances" {
+  count = "${var.instance_count}"
   triggers {
     instance_ids = "${join(",",concat(aws_instance.this_t2.*.id, aws_instance.this.*.id))}"
   }
