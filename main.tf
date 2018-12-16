@@ -1,6 +1,6 @@
 locals {
   is_t_instance_type = "${replace(var.instance_type, "/^t[23]{1}\\..*$/", "1") == "1" ? "1" : "0"}"
-  ip_for_conn = "${split(",", var.bastion_host != "" ? join(",", compact(concat(coalescelist(aws_instance.this.*.private_ip, aws_instance.this_t2.*.private_ip), list("")))) : var.allocate_eip ? join(",", compact(concat(aws_eip.this.*.public_ip))) : join(",", compact(concat(coalescelist(aws_instance.this.*.public_ip, aws_instance.this_t2.*.public_ip), list("")))))}"
+  ip_for_conn = "${compact(split(",", var.bastion_host != "" ? join(",", compact(concat(coalescelist(aws_instance.this.*.private_ip, aws_instance.this_t2.*.private_ip), list("")))) : var.allocate_eip ? join(",", compact(concat(aws_eip.this.*.public_ip))) : join(",", compact(concat(coalescelist(aws_instance.this.*.public_ip, aws_instance.this_t2.*.public_ip), list(""))))))}"
 }
 
 ######
@@ -120,7 +120,7 @@ resource "null_resource" "provision_instances" {
     ]
     connection {
       type                   = "ssh"
-      host                   = "${element(local.ip_for_conn, count.index)}"
+      host                   = "${element(local.ip_for_conn, 0)}"
       user                   = "${var.default_system_user}"
       private_key            = "${var.ssh_private_key}"
       timeout                = "15m"
@@ -151,7 +151,7 @@ resource "null_resource" "provision_instances" {
 
     connection {
       type                   = "ssh"
-      host                   = "${element(local.ip_for_conn, count.index)}"
+      host                   = "${element(local.ip_for_conn, 0)}"
       user                   = "${var.default_system_user}"
       private_key            = "${var.ssh_private_key}"
 
