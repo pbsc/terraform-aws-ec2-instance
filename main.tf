@@ -120,7 +120,7 @@ resource "null_resource" "provision_instances" {
     ]
     connection {
       type                   = "ssh"
-      host                   = "${element(local.ip_for_conn, 0)}"
+      host                   = "${element(local.ip_for_conn, count.index)}"
       user                   = "${var.default_system_user}"
       private_key            = "${var.ssh_private_key}"
       timeout                = "15m"
@@ -151,7 +151,7 @@ resource "null_resource" "provision_instances" {
 
     connection {
       type                   = "ssh"
-      host                   = "${element(local.ip_for_conn, 0)}"
+      host                   = "${element(local.ip_for_conn, count.index)}"
       user                   = "${var.default_system_user}"
       private_key            = "${var.ssh_private_key}"
 
