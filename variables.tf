@@ -155,7 +155,7 @@ variable "chef_user" {
 variable "chef_client_version" {
   type        = "string"
   description = "the version of Chef to install on the node"
-  default     = ""
+  default     = "14"
 }
 
 variable "chef_vault_json" {
